@@ -1,44 +1,49 @@
-import {test, expect} from "@playwright/test";
+import { test, expect } from "@playwright/test";
+import { getAllLocatorsConduit } from "../functions/locatorFunctions";
 
-test.beforeEach(async ({page}) => {
-    await page.goto('https://demo.learnwebdriverio.com/register')
-})
+test.beforeEach(async ({ page }) => {
+  await page.goto("https://demo.learnwebdriverio.com/register");
+});
 
+test("Sign up with wrong email - MP006", async ({ page }) => {
+  const locators = getAllLocatorsConduit(page);
 
-test("Sign up with wrong email - MP006", async ({page}) => {
-    await page.getByRole('textbox', { name: 'Username' }).fill("Maryna3");
-    await page.getByRole('textbox', { name: 'Email' }).fill("Maryna");
-    await page.getByRole('textbox', { name: 'Password' }).fill("Test123");
-    await page.getByRole('button', { name: 'Sign up' }).click();
-    const errorMessage = await page.getByText('email is invalid');
-    await expect(errorMessage).toBeVisible();
-})
+  await locators.userName.fill("Maryna3");
+  await locators.email.fill("Maryna");
+  await locators.password.fill("Test123");
+  await locators.signupButton.click();
+  await expect(locators.errorMessage1).toBeVisible();
+});
 
-test("Sign up with empty password - MP007", async ({page}) => { //BUG
-    await page.getByRole('textbox', { name: 'Username' }).fill("Maryna10");
-    await page.getByRole('textbox', { name: 'Email' }).fill("Maryna10@test.com");
-    await page.getByRole('textbox', { name: 'Password' }).fill("");
-    await page.getByRole('button', { name: 'Sign up' }).click();
-    const errorMessage = await page.getByText('password is invalid');
-    await expect(errorMessage).toBeVisible();
-})
+test("Sign up with empty password - MP007", async ({ page }) => {
+  //BUG
+  const locators = getAllLocatorsConduit(page);
 
-test("Sign up successfully - MP008", async ({page}) => {
-    await page.getByRole('textbox', { name: 'Username' }).fill("Maryna5");
-    await page.getByRole('textbox', { name: 'Email' }).fill("Maryna2@test.com");
-    await page.getByRole('textbox', { name: 'Password' }).fill("Test123");
-    await page.getByRole('button', { name: 'Sign up' }).click();
-    expect(page).toHaveURL('https://demo.learnwebdriverio.com/')
-    // const successMessage = await page.getByText('conduitA place to share your');
-    // expect(successMessage).toBeVisible();
-})
-test("Sign up with the same username - MP009", async ({page}) => {
-    await page.getByRole('textbox', { name: 'Username' }).fill("Maryna4");
-    await page.getByRole('textbox', { name: 'Email' }).fill("Maryna2@test.com");
-    await page.getByRole('textbox', { name: 'Password' }).fill("Test123");
-    await page.getByRole('button', { name: 'Sign up' }).click();
-    const errorMessage1 = await page.getByText('username is already taken.');
-    await expect(errorMessage1).toBeVisible();
-    const errorMessage2 = await page.getByText('email is already taken.');
-    await expect(errorMessage2).toBeVisible();
-})
+  await locators.userName.fill("Maryna10");
+  await locators.email.fill("Maryna10@test.com");
+  await locators.password.fill("");
+  await locators.signupButton.click();
+  await expect(locators.errorMessage1).toBeVisible();
+});
+
+test("Sign up successfully - MP008", async ({ page }) => {
+  const locators = getAllLocatorsConduit(page);
+
+  await locators.userName.fill("Maryna20");
+  await locators.email.fill("Maryna20@test.com");
+  await locators.password.fill("Test123");
+  await locators.signupButton.click();
+  await expect(page).toHaveURL("https://demo.learnwebdriverio.com/");
+  // const successMessage = await page.getByText('conduitA place to share your');
+  // expect(mainPageHeader).toBeVisible();
+});
+test("Sign up with the same username - MP009", async ({ page }) => {
+  const locators = getAllLocatorsConduit(page);
+
+  await locators.userName.fill("Maryna8");
+  await locators.email.fill("Maryna8@test.com");
+  await locators.password.fill("Test123");
+  await locators.signupButton.click();
+  await expect(locators.errorMessage2).toBeVisible();
+  await expect(locators.errorMessage3).toBeVisible();
+});

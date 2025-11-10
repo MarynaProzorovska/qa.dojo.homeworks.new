@@ -2,7 +2,9 @@
   "name": "qa-dojo-7-practise-maryna",
   "version": "1.0.0",
   "main": "index.js",
-  "scripts": {},
+  "scripts": { 
+    "ifelse": "node ./tests/ifElseTests.js"
+  },
   "author": "Maryna",
   "license": "ISC",
   "description": "",
